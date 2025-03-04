@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plan Results</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <style>
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)),
+                        url('static/gym-bg.jpeg') center/cover fixed;
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            padding: 20px;
+        }
+
+        /* Pyramid Layout */
+        .pyramid-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 20px auto 30px;
+            max-width: 400px;
+            gap: 10px;
+        }
+
+        .pyramid-level {
+            background: linear-gradient(45deg, #1a1a1a, #333);
+            padding: 12px 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .pyramid-level:hover {
+            transform: scale(1.02);
+            background: linear-gradient(45deg, #800000, #ff0000);
+        }
+
+        .pyramid-level h4 {
+            margin-bottom: 4px;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .pyramid-level strong {
+            font-size: 1.2em;
+            color: #ff3333;
+        }
+
+        .pyramid-level-1 { width: 40%; }
+        .pyramid-level-2 { width: 60%; }
+        .pyramid-level-3 { width: 80%; }
+
+        /* Flip Card Styles */
+        .flip-card-container {
+            perspective: 1000px;
+            width: 600px;
+            height: 500px;
+            margin: 30px auto;
+        }
+
+        .flip-card {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+
+        .flip-card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            padding: 25px;
+            border-radius: 15px;
+            color: white;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .flip-card-front {
+            background: linear-gradient(135deg, #1a1a1a 0%, #333 100%);
+            border: 2px solid #ff0000;
+        }
+
+        .flip-card-back {
+            transform: rotateY(180deg);
+            background: linear-gradient(135deg, #800000 0%, #ff0000 100%);
+            border: 2px solid #1a1a1a;
+        }
+
+        .card-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .day-indicator {
+            background: rgba(255, 0, 0, 0.2);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 1.1em;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(255, 0, 0, 0.2);
+        }
+
+        .muscle-groups {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .muscle-badge {
+            background: linear-gradient(45deg, #800000, #ff0000);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 5px rgba(255, 0, 0, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .muscle-badge:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(255, 0, 0, 0.4);
+        }
+
+        .exercise-list, .diet-list {
+            list-style: none;
+            padding: 0;
+            margin: 10px 0;
+            width: 100%;
+        }
+
+        .exercise-list li, .diet-list li {
+            margin: 8px 0;
+            padding: 10px 15px;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            text-align: left;
+            transition: all 0.3s ease;
+        }
+
+        .exercise-list li:hover, .diet-list li:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+        }
+
+        .nav-buttons {
+            text-align: center;
+            margin: 25px 0;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .carousel-btn {
+            background: linear-gradient(45deg, #800000, #ff0000);
+            border: none;
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.2);
+            min-width: 160px;
+        }
+
+        .carousel-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 0, 0, 0.3);
+            background: linear-gradient(45deg, #ff0000, #ff3333);
+        }
+
+        .go-back-btn {
+            background: linear-gradient(45deg, #333, #666);
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 15px;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .go-back-btn:hover {
+            transform: translateY(-2px);
+            background: linear-gradient(45deg, #666, #999);
+            color: white;
+            text-decoration: none;
+        }
+
+        h1 {
+            text-transform: uppercase;
+            font-weight: 800;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            margin-bottom: 25px;
+            font-size: 2.2em;
+            letter-spacing: 2px;
+        }
+
+        h1 span {
+            color: #ff0000;
+            text-shadow: 2px 2px 4px rgba(255, 0, 0, 0.3);
+        }
+
+        /* Progress indicator */
+        .progress-indicator {
+            text-align: center;
+            margin-bottom: 15px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <div class="text-center mb-4">
+            <h1>
+                <span>Your</span> Fitness & Nutrition <span>Plan</span>
+            </h1>
+        </div>
+
+        <!-- Pyramid Layout -->
+        <div class="pyramid-container">
+            <div class="pyramid-level pyramid-level-1">
+                <h4>Protein</h4>
+                <strong>{{ protein }}g</strong>
+            </div>
+            <div class="pyramid-level pyramid-level-2">
+                <div style="display: flex; justify-content: space-around; align-items: center;">
+                    <div>
+                        <h4>Carbs</h4>
+                        <strong>{{ carbs }}g</strong>
+                    </div>
+                    <div>
+                        <h4>Fats</h4>
+                        <strong>{{ fats }}g</strong>
+                    </div>
+                </div>
+            </div>
+            <div class="pyramid-level pyramid-level-3">
+                <h4>Daily Calories</h4>
+                <strong>{{ daily_calories }} kcal</strong>
+            </div>
+        </div>
+
+        <!-- Flip Cards -->
+        <div class="flip-card-container">
+            {% for item in plan %}
+            <div class="flip-card" data-index="{{ loop.index0 }}">
+                <div class="flip-card-front">
+                    <div class="day-indicator">Week {{ item.week }} - Day {{ item.day }}</div>
+                    <div class="card-content">
+                        <h4>Target Muscle Groups</h4>
+                        <div class="muscle-groups">
+                            {% if item.muscles is defined and item.muscles %}
+                            {% for muscle in item.muscles %}
+                            <span class="muscle-badge">{{ muscle }}</span>
+                            {% endfor %}
+                        {% else %}
+                            <span class="muscle-badge">No Muscles Defined</span>
+                        {% endif %}
+                        </div>
+                        <h4>Workout Plan</h4>
+                        <ul class="exercise-list">
+                            {% for exercise in item.workout %}
+                            <li>{{ exercise }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                <div class="flip-card-back">
+                    <div class="day-indicator">Week {{ item.week }} - Day {{ item.day }}</div>
+                    <div class="card-content">
+                        <h4>Diet Plan</h4>
+                        <ul class="diet-list">
+                            {% for meal in item.diet %}
+                            <li>{{ meal }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="progress-indicator">
+            Click card to flip between workout and diet plan
+        </div>
+
+        <div class="nav-buttons">
+            <button class="carousel-btn prev-btn">← Previous</button>
+            <button class="carousel-btn next-btn">Next →</button>
+        </div>
+
+        <div class="text-center">
+            <a href="javascript:history.back()" class="go-back-btn">Go Back</a>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            let cards = $(".flip-card");
+            let currentIndex = 0;
+
+            function updateCards() {
+                cards.hide();
+                cards.eq(currentIndex).show();
+            }
+
+            $(".flip-card").click(function() {
+                $(this).toggleClass("flipped");
+            });
+
+            $(".next-btn").click(function() {
+                currentIndex = (currentIndex + 1) % cards.length;
+                updateCards();
+            });
+
+            $(".prev-btn").click(function() {
+                currentIndex = (currentIndex - 1 + cards.length) % cards.length;
+                updateCards();
+            });
+
+            updateCards();
+        });
+    </script>
+</body>
+</html>

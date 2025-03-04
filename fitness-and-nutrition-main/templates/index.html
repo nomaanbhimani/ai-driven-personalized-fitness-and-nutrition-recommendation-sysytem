@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fitness and Nutrition Planner</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #000;
+            color: white;
+        }
+        .logo {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            z-index: 1000;
+            width: 80px; /* Reduced from 150px */
+            height: auto;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .logo img {
+            width: 100%;
+            height: auto;
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));
+        }
+
+        .landing-section {
+            min-height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+                        url('static/bbbg.jpg') center/cover fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .form-section {
+            min-height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+                        url('static/bbg.jpg') center/cover fixed;
+            padding: 50px 0;
+            display: none;
+        }
+
+        h1 {
+            font-size: 3.5em;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        h1 span {
+            color: #ff0000;
+            text-shadow: 2px 2px 4px rgba(255, 0, 0, 0.3);
+        }
+
+        .lead {
+            font-size: 1.5em;
+            margin-bottom: 30px;
+            color: #ddd;
+        }
+
+        .btn-start {
+            background: linear-gradient(45deg, #800000, #ff0000);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-weight: bold;
+            text-transform: uppercase;
+            border: none;
+            transition: all 0.3s ease;
+            font-size: 1.1em;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.3);
+        }
+
+        .btn-start:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 0, 0, 0.4);
+            background: linear-gradient(45deg, #ff0000, #ff3333);
+            color: white;
+        }
+
+        .form-container {
+            background: linear-gradient(135deg, rgba(26, 26, 26, 0.9), rgba(51, 51, 51, 0.9));
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.2);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-control {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 0, 0, 0.2);
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: #ff0000;
+            box-shadow: 0 0 0 0.2rem rgba(255, 0, 0, 0.25);
+            color: white;
+        }
+
+        label {
+            color: #ff3333;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            font-size: 0.9em;
+            letter-spacing: 1px;
+        }
+
+        select.form-control option {
+            background: #333;
+            color: white;
+        }
+
+        .btn-submit {
+            background: linear-gradient(45deg, #800000, #ff0000);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: bold;
+            text-transform: uppercase;
+            border: none;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 20px;
+            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.2);
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 0, 0, 0.3);
+            background: linear-gradient(45deg, #ff0000, #ff3333);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+            font-weight: 800;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .section-title span {
+            color: #ff0000;
+        }
+    </style>
+</head>
+<body>
+        <!-- Logo -->
+        <div class="logo">
+            <img src="static/logo.jpg" alt="Fitness Planner Logo">
+        </div>
+    
+    <!-- Landing Section -->
+    <section class="landing-section">
+        <div class="container">
+            <h1 class="animate-fade-in">Transform Your <span>Body</span><br>Transform Your <span>Life</span></h1>
+            <p class="lead animate-fade-in">Get your personalized workout and nutrition plan designed for your goals</p>
+            <button class="btn-start animate-fade-in" onclick="showForm()">Start Your Journey</button>
+        </div>
+    </section>
+
+    <!-- Form Section -->
+    <section class="form-section" id="formSection">
+        <div class="container">
+            <h2 class="section-title">Create Your <span>Custom Plan</span></h2>
+            <div class="form-container">
+                <form action="/predict" method="POST">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" class="form-control" id="name" name="name" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="age">Age</label>
+                                <input type="number" class="form-control" id="age" name="age" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="height">Height (cm)</label>
+                                <input type="number" class="form-control" id="height" name="height" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="weight">Weight (kg)</label>
+                                <input type="number" class="form-control" id="weight" name="weight" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="gender">Gender</label>
+                                <select class="form-control" id="gender" name="gender" required>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="goal">Goal</label>
+                                <select class="form-control" id="goal" name="goal" required>
+                                    <option value="bulking">Bulking</option>
+                                    <option value="cutting">Cutting</option>
+                                    <option value="maintaining">Maintaining</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="activity_level">Activity Level</label>
+                                <select class="form-control" id="activity_level" name="activity_level" required>
+                                    <option value="sedentary">Sedentary</option>
+                                    <option value="light">Light</option>
+                                    <option value="moderate">Moderate</option>
+                                    <option value="active">Active</option>
+                                    <option value="very active">Very Active</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="difficulty">Workout Difficulty (1-5)</label>
+                                <input type="number" class="form-control" id="difficulty" name="difficulty" min="1" max="5" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="diet_type">Diet Type</label>
+                                <select class="form-control" id="diet_type" name="diet_type" required>
+                                    <option value="non-veg">Non-Vegetarian</option>
+                                    <option value="veg">Vegetarian</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="workout_type">Workout Type</label>
+                                <select class="form-control" id="workout_type" name="workout_type" required>
+                                    <option value="push pull legs">Push Pull Legs</option>
+                                    <option value="single">Single</option>
+                                    <option value="compound">Compound</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="num_weeks">Number of Weeks</label>
+                        <input type="number" class="form-control" id="num_weeks" name="num_weeks" required>
+                    </div>
+
+                    <button type="submit" class="btn-submit">Generate Your Plan</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        function showForm() {
+            document.querySelector('.landing-section').style.display = 'none';
+            document.querySelector('.form-section').style.display = 'block';
+            window.scrollTo(0, 0);
+        }
+    </script>
+</body>
+</html>
